@@ -1,0 +1,36 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+body {
+    background-color: #c0c0c0 !important;
+}
+.logo-image img {
+    width: 100%;
+}
+
+.option-btn {
+    background-color: cadetblue !important;
+    color: white !important;
+}
+.option-btn:hover {
+    background-color: white !important;
+    color: black !important;
+}
+
+#output-column  {
+    /* background-color: #7fffd455;
+    border: 0;
+    border-radius: 10px; */
+    padding: 20xp 10px;
+}
+
+#output-div button{
+    margin-left: 10px;
+    background-color: darkgreen;
+    color: white;
+    border: 0;
+    border-radius: 3px;
+}
