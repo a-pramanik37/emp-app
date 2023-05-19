@@ -22,11 +22,11 @@
                     <div class="col-12 text-center d-flex justify-content-center gap-3 flex-wrap" id="option-column">
                         <div><button class="btn option-btn" id="add-emp" onclick="addEmp()">Add New Employee</button></div>
                         <div><button class="btn option-btn" id="show-emp" onclick="showAllEmp()">Show All Employee</button></div>
-                        <div><button class="btn option-btn" id="edit-emp" onclick="addSearchField()">Edit Employee</button></div>
+                        <div><button class="btn option-btn" id="edit-emp" onclick="addSearchField()">Edit/Delete Employee</button></div>
                     </div>
-                    <div class="col-8 text-center p-4" id="output-column">
+                    <div class="col-6 text-center p-4" id="output-column">
                         <div id="input-div"></div>
-                        <div class="" id="output-div"></div>
+                        <div id="output-div"></div>
                     </div>
 
             </div>
@@ -36,8 +36,8 @@
     <script src="app.js"></script>
     <script>
         empList = new CustomList("string");
-        empList.add("rafiq");
-        empList.add("shafiq");
+        empList.add("Rahim Mia");
+        empList.add("Khandker Hasib");
 
         // function func(){
         //     for(let i=0; i<empList.size_of_list(); i++){
@@ -48,6 +48,40 @@
         //         x.append(toBeAdded);
         //     }
         // }
+
+
+        function liveSearch(){
+            console.log("for test");
+            //locate the employee names
+            let employees = document.querySelectorAll(".employees");
+            // btns
+            let editBtns = document.querySelectorAll(".edit-btn");
+            let deleteBtns = document.querySelectorAll(".delete-btn");
+
+            //locate the search input
+            let search_query = document.getElementById("searchbox").value;
+
+            //loop through the employee list
+            for(let i = 0; i < employees.length; i++){
+                // console.log(employees[i].innerText);
+                //if the text is within the card
+                if(employees[i].innerText.toLowerCase().
+                //and the text matches the search query
+                includes(search_query.toLowerCase())){
+                    //remove the `is-hidden` class
+                    employees[i].classList.remove("is-hidden");
+                    editBtns[i].classList.remove("is-hidden");
+                    deleteBtns[i].classList.remove("is-hidden");
+                } else {
+                    //otherwise, add the class
+                    editBtns[i].classList.add("is-hidden");
+                    deleteBtns[i].classList.add("is-hidden");
+                    employees[i].classList.add("is-hidden");
+                }
+            }
+
+
+        }
 
         function clearInputDiv(){
             let saveSuccess = document.getElementById("input-div");
@@ -60,12 +94,20 @@
 
         function saveIntoList(){
             const empName = document.getElementById("emp-name");
-            // console.log(empName.value);
-            empList.add(empName.value);
+            let msg = "";
             let saveSuccess = document.getElementById("output-div");
             const successMsg = document.createElement("p");
             successMsg.className="success-msg";
-            successMsg.innerText = `New employee ${empName.value} has been added successfully`;
+            // console.log(empName.value);
+            if(empName.value==""){
+                msg = "Invalid input, please try again."
+            }
+            else {
+                empList.add(empName.value);
+                msg = `New employee ${empName.value} has been added successfully`;
+            }
+            successMsg.innerText=msg;
+            clearInputDiv();
             saveSuccess.innerHTML="";
             saveSuccess.appendChild(successMsg);
         }
@@ -88,7 +130,23 @@
         }
 
         function addSearchField(){
-            
+            clearOutputDiv();
+            clearInputDiv();
+            showAllEmpWithoutClearing();
+            const searchArea = document.querySelector("#input-div");
+
+            const searchLabel = document.createElement("label");
+            searchLabel.for = "searchbox";
+            searchLabel.innerText = "Search Employee";
+
+            const searchbox = document.createElement("input");
+            searchbox.type = "search";
+            searchbox.oninput = liveSearch;
+            searchbox.id = "searchbox";
+
+            searchArea.appendChild(searchLabel);
+            searchArea.appendChild(searchbox);
+
         }
 
 
@@ -99,19 +157,68 @@
         }
 
 
-        function showAllEmp(){
+        function showAllEmpWithoutClearing(){
             clearOutputDiv();
-            clearInputDiv();
+
             for(let i=0; i<empList.size_of_list(); i++){
                 let item = empList.getValueAt(i);
                 let x = document.getElementById("output-div");
                 let toBeAdded = document.createElement("div");
+                toBeAdded.className = "employees"
                 toBeAdded.innerText = item;
-                x.append(toBeAdded);
+
+                let editBtn = document.createElement("button");
+                editBtn.className = "edit-btn"
+                editBtn.innerText = "Edit";
+                let deleteBtn = document.createElement("button");
+                deleteBtn.className = "delete-btn";
+                deleteBtn.innerText = "Delete";
+
+                x.appendChild(toBeAdded);
+                x.appendChild(editBtn);
+                x.appendChild(deleteBtn);
+            }
+        }
+
+        function showAllEmp(){
+            clearOutputDiv();
+            clearInputDiv();
+            let headline = document.createElement("div");
+            headline.className = "headline";
+            headline.innerText = `We have ${empList.size_of_list()} employees in our office`;
+            inputDiv = document.getElementById("input-div");
+            inputDiv.appendChild(headline);
+            for(let i=0; i<empList.size_of_list(); i++){
+                let item = empList.getValueAt(i);
+                let x = document.getElementById("output-div");
+                let toBeAdded = document.createElement("div");
+                toBeAdded.className = "employees"
+                toBeAdded.innerText = item;
+                x.appendChild(toBeAdded);
             }
         }
 
 
+
+        // let typingTimer;
+        // let typeInterval = 500;
+        // let searchInput = document.getElementById("searchbox");
+
+        // searchInput.addEventListener('keyup', () =>{
+        //     clearTimeout(typingTimer);
+        //     typingTimer = setTimeout(liveSearch, typeInterval);
+        // });
+
+        //A little delay
+        // let typingTimer;               
+        // let typeInterval = 500;  
+        // let searchInput = document.getElementById('searchbox');
+
+        // searchInput.addEventListener('keyup', () => {
+        // clearTimeout(typingTimer);
+        // typingTimer = setTimeout(liveSearch, typeInterval);
+        // });
+        
 
 
     </script>
