@@ -156,27 +156,54 @@
             addInputField();
         }
 
+        function deleteEmp(buttonID){
+            let empID = buttonID.toString().slice(0, 15);
+            let emp = document.getElementById(empID);
+            console.log(empID);
+        }
+
+
+        function editEmp(buttonID){
+
+        }
 
         function showAllEmpWithoutClearing(){
             clearOutputDiv();
+            let cnt=0;
 
             for(let i=0; i<empList.size_of_list(); i++){
                 let item = empList.getValueAt(i);
                 let x = document.getElementById("output-div");
                 let toBeAdded = document.createElement("div");
                 toBeAdded.className = "employees"
+
+                //creating unique IDs
+                let currentDate = new Date();
+                empID = currentDate.getTime().toString()+"e"+cnt;
+                editBtnID = empID+currentDate.getTime().toString()+"u"+cnt+1;
+                deleteBtnID = empID+currentDate.getTime().toString()+"d"+cnt+2;
+
+                toBeAdded.id = empID;
                 toBeAdded.innerText = item;
 
                 let editBtn = document.createElement("button");
                 editBtn.className = "edit-btn"
                 editBtn.innerText = "Edit";
+                editBtn.id = editBtnID;
+                editBtn.onclick = editEmp(editBtnID);
+
                 let deleteBtn = document.createElement("button");
                 deleteBtn.className = "delete-btn";
                 deleteBtn.innerText = "Delete";
+                deleteBtn.id = deleteBtnID;
+                deleteBtn.onclick = deleteEmp(deleteBtnID);
 
                 x.appendChild(toBeAdded);
                 x.appendChild(editBtn);
                 x.appendChild(deleteBtn);
+                
+                cnt++;
+                if(cnt>9)cnt=0;
             }
         }
 
