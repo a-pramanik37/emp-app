@@ -19,14 +19,13 @@
                         <img src="images/ems-logo.webp" alt="">
                     </div>
                 </div>
-                    <div class="col-12 text-center d-flex justify-content-center gap-3" id="option-column">
+                    <div class="col-12 text-center d-flex justify-content-center gap-3 flex-wrap" id="option-column">
                         <div><button class="btn option-btn" id="add-emp" onclick="addEmp()">Add New Employee</button></div>
                         <div><button class="btn option-btn" id="show-emp" onclick="showAllEmp()">Show All Employee</button></div>
-                        <div><button class="btn option-btn" id="edit-emp">Edit Employee Info</button></div>
-                        <div><button class="btn option-btn" id="search-emp">Search Employee</button></div>
+                        <div><button class="btn option-btn" id="edit-emp" onclick="addSearchField()">Edit Employee</button></div>
                     </div>
                     <div class="col-8 text-center p-4" id="output-column">
-
+                        <div id="input-div"></div>
                         <div class="" id="output-div"></div>
                     </div>
 
@@ -50,6 +49,10 @@
         //     }
         // }
 
+        function clearInputDiv(){
+            let saveSuccess = document.getElementById("input-div");
+            saveSuccess.innerHTML="";
+        }
         function clearOutputDiv(){
             let saveSuccess = document.getElementById("output-div");
             saveSuccess.innerHTML="";
@@ -57,7 +60,8 @@
 
         function saveIntoList(){
             const empName = document.getElementById("emp-name");
-            console.log(empName.value);
+            // console.log(empName.value);
+            empList.add(empName.value);
             let saveSuccess = document.getElementById("output-div");
             const successMsg = document.createElement("p");
             successMsg.className="success-msg";
@@ -66,10 +70,12 @@
             saveSuccess.appendChild(successMsg);
         }
         function addInputField(){
-            const input = document.querySelector("#output-div");
+            clearOutputDiv();
+            clearInputDiv();
+            const input = document.querySelector("#input-div");
             const name = document.createElement("input");
             name.type = "text";
-            name.id = "emp-name"
+            name.id = "emp-name";
             name.placeholder = "Enter Employee Name";
 
             const addBtn = document.createElement("button");
@@ -81,23 +87,31 @@
             input.appendChild(addBtn);
         }
 
+        function addSearchField(){
+            
+        }
+
 
         function addEmp(){
             clearOutputDiv();
+            clearInputDiv();
             addInputField();
         }
 
 
         function showAllEmp(){
             clearOutputDiv();
+            clearInputDiv();
             for(let i=0; i<empList.size_of_list(); i++){
                 let item = empList.getValueAt(i);
-                let x = document.getElementById("output-column");
+                let x = document.getElementById("output-div");
                 let toBeAdded = document.createElement("div");
                 toBeAdded.innerText = item;
                 x.append(toBeAdded);
             }
         }
+
+
 
 
     </script>
