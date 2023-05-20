@@ -134,7 +134,7 @@ class LinkedList {
             current = current.next;
         }
 
-        return console.log(`Item ${element} is not present in the list`);
+        return -1;
 
     }
 

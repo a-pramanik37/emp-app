@@ -51,7 +51,6 @@
 
 
         function liveSearch(){
-            console.log("for test");
             //locate the employee names
             let employees = document.querySelectorAll(".employees");
             // btns
@@ -156,10 +155,20 @@
             addInputField();
         }
 
-        function deleteEmp(buttonID){
-            let empID = buttonID.toString().slice(0, 15);
-            let emp = document.getElementById(empID);
-            console.log(empID);
+        function deleteEmp(event){
+            let deleteBtn = event.target;
+            let btnID = deleteBtn.id;
+            let empID = btnID.slice(0, 15);
+            empName = document.getElementById(empID).innerText;
+            let confirm = prompt(`Are you sure? Write anything and click OK to remove ${empName} or click Cancel otherwise.`);
+            if(confirm){
+                let res = empList.removeElement(empName);
+                if(res==-1)alert(`Employee not found or some error occured!`);
+                else{
+                    alert(`${empName} removed successfully`);
+                    showAllEmpWithoutClearing();
+                } 
+            }
         }
 
 
@@ -196,7 +205,7 @@
                 deleteBtn.className = "delete-btn";
                 deleteBtn.innerText = "Delete";
                 deleteBtn.id = deleteBtnID;
-                deleteBtn.onclick = deleteEmp(deleteBtnID);
+                deleteBtn.onclick = deleteEmp;
 
                 x.appendChild(toBeAdded);
                 x.appendChild(editBtn);
