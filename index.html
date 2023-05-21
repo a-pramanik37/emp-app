@@ -36,13 +36,43 @@
     <script src="app.js"></script>
     <script>
         empList = new CustomList("string");
-        empList.add("Rahim Mia");
-        empList.add("Khandker Hasib");
 
+        let listOfString =[];
+
+        function copyToStringList(){
+            listOfString =[];
+            for(let i =0; i<empList.size_of_list(); i++){
+                listOfString[i] = empList.getValueAt(i);
+            }
+        }
+        function copyToCustomList(){
+            // console.log(listOfString.length);
+            for(let i=0; i < listOfString.length; i++){
+                console.log(listOfString[i]);
+                empList.add(listOfString[i]);
+            }
+        }
+
+
+        listOfString = JSON.parse(localStorage.getItem('employeeList'));
+
+
+        if(listOfString!=null){
+            copyToCustomList();
+        }
+
+        console.log(listOfString)
+        console.log(empList);
+
+
+
+        //need this variable from update operation
         let tmpEmpName="";
 
-
-
+        function saveIntoLocalStorage(){
+            copyToStringList();
+            localStorage.setItem('employeeList', JSON.stringify(listOfString));
+        }
 
         function liveSearch(){
             //locate the employee names
@@ -106,6 +136,7 @@
             }
             else {
                 empList.add(empName.value);
+                saveIntoLocalStorage();
                 msg = `New employee ${empName.value} has been added successfully`;
             }
             successMsg.innerText=msg;
@@ -168,6 +199,7 @@
                 let res = empList.removeElement(empName);
                 if(res==-1)alert(`Employee not found or some error occured!`);
                 else{
+                    saveIntoLocalStorage();
                     alert(`${empName} removed successfully`);
                     showAllEmpWithoutClearing();
                 } 
@@ -184,6 +216,7 @@
                 let index = empList.indexOf(tmpEmpName);
                 let removedItem = empList.removeFrom(index);
                 empList.insertAt(newName, index);
+                saveIntoLocalStorage();
                 let updateSuccess = alert("Successfully updated!");
                 // if(updateSuccess){
                 // }
@@ -215,9 +248,7 @@
             let btnID = editBtn.id;
             let empID = btnID.slice(0, 15);
             empName = document.getElementById(empID).innerText;
-
             addUpdateField(empName);
-
         }
 
         function showAllEmpWithoutClearing(){
