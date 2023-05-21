@@ -14,9 +14,9 @@
     <section class="app-view" id="main-section">
         <div class="container" id="main-container">
             <div class="row d-flex flex-column align-items-center" id="main-row">
-                <div class="col-4">
+                <div class="col-12 w-50">
                     <div class="logo-image">
-                        <img src="images/ems-logo.webp" alt="">
+                        <img src="images/ems-logo-2.webp" alt="">
                     </div>
                 </div>
                     <div class="col-12 text-center d-flex justify-content-center gap-3 flex-wrap" id="option-column">
@@ -24,8 +24,8 @@
                         <div><button class="btn option-btn" id="show-emp" onclick="showAllEmp()">Show All Employee</button></div>
                         <div><button class="btn option-btn" id="edit-emp" onclick="addSearchField()">Edit/Delete Employee</button></div>
                     </div>
-                    <div class="col-6 text-center p-4" id="output-column">
-                        <div id="input-div"></div>
+                    <div class="col-12 text-center p-4" id="output-column">
+                        <div class="text-center" id="input-div"></div>
                         <div id="output-div"></div>
                     </div>
 
@@ -39,15 +39,9 @@
         empList.add("Rahim Mia");
         empList.add("Khandker Hasib");
 
-        // function func(){
-        //     for(let i=0; i<empList.size_of_list(); i++){
-        //         let item = empList.getValueAt(i);
-        //         let x = document.getElementById("output-column");
-        //         let toBeAdded = document.createElement("div");
-        //         toBeAdded.innerText = item;
-        //         x.append(toBeAdded);
-        //     }
-        // }
+        let tmpEmpName="";
+
+
 
 
         function liveSearch(){
@@ -79,6 +73,15 @@
                 }
             }
 
+                    //A little delay
+        // let typingTimer;               
+        // let typeInterval = 500;  
+        // let searchInput = document.getElementById('searchbox');
+
+        // searchInput.addEventListener('keyup', () => {
+        // clearTimeout(typingTimer);
+        // typingTimer = setTimeout(liveSearch, typeInterval);
+        // });
 
         }
 
@@ -171,8 +174,49 @@
             }
         }
 
+        function updateAndSave(){
+            // console.log("update function e gese");
+            newName = document.getElementById("emp-name").value;
+            console.log(newName);
 
-        function editEmp(buttonID){
+            let confirm = prompt(`Change name from ${tmpEmpName} to ${newName}?\nWrite anything and click OK to update or click Cancel otherwise.`);
+            if(confirm){
+                let index = empList.indexOf(tmpEmpName);
+                let removedItem = empList.removeFrom(index);
+                empList.insertAt(newName, index);
+                let updateSuccess = alert("Successfully updated!");
+                // if(updateSuccess){
+                // }
+                addSearchField();
+            }        
+        }
+        function addUpdateField(empName){
+            // clearOutputDiv();
+            clearInputDiv();
+            tmpEmpName = empName;
+            const input = document.querySelector("#input-div");
+            const name = document.createElement("input");
+            name.type = "text";
+            name.id = "emp-name";
+            name.value = empName;
+            // console.log(empName);
+            // name.placeholder = "Update Employee Name";
+
+            const addBtn = document.createElement("button");
+            addBtn.innerText = "Click to Update";
+            addBtn.id = "add-emp-btn";
+            addBtn.addEventListener("click", updateAndSave);
+            input.appendChild(name);
+            input.appendChild(addBtn);
+        }
+
+        function editEmp(event){
+            let editBtn = event.target;
+            let btnID = editBtn.id;
+            let empID = btnID.slice(0, 15);
+            empName = document.getElementById(empID).innerText;
+
+            addUpdateField(empName);
 
         }
 
@@ -199,7 +243,7 @@
                 editBtn.className = "edit-btn"
                 editBtn.innerText = "Edit";
                 editBtn.id = editBtnID;
-                editBtn.onclick = editEmp(editBtnID);
+                editBtn.onclick = editEmp;
 
                 let deleteBtn = document.createElement("button");
                 deleteBtn.className = "delete-btn";
@@ -245,17 +289,8 @@
         //     typingTimer = setTimeout(liveSearch, typeInterval);
         // });
 
-        //A little delay
-        // let typingTimer;               
-        // let typeInterval = 500;  
-        // let searchInput = document.getElementById('searchbox');
 
-        // searchInput.addEventListener('keyup', () => {
-        // clearTimeout(typingTimer);
-        // typingTimer = setTimeout(liveSearch, typeInterval);
-        // });
         
-
 
     </script>
 

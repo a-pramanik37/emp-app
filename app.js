@@ -168,7 +168,7 @@ class LinkedList {
             current = current.next;
         }
         //not found
-        return console.log(`Item ${element} was not found in the list.`);
+        return -1;
     }
 
     //checks the list for empty
@@ -224,7 +224,7 @@ class CustomList {
     }
     //remove an item from a specific index
     removeFrom(index){
-        return console.log("Removed item is "+this.linkedList.removeFrom(index));
+        return this.linkedList.removeFrom(index);
     }
     //remove a particular item from the list (which appears first)
     removeElement(item){
