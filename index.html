@@ -35,16 +35,22 @@
 
     <script src="app.js"></script>
     <script>
+
+        //declaring an  object of customlist
         empList = new CustomList("string");
 
+        //declaring a list for
         let listOfString =[];
 
+        //copy the custom list elements into the listOfString list
         function copyToStringList(){
             listOfString =[];
             for(let i =0; i<empList.size_of_list(); i++){
                 listOfString[i] = empList.getValueAt(i);
             }
         }
+
+        //opy the listOfString list elements into the custom list
         function copyToCustomList(){
             // console.log(listOfString.length);
             for(let i=0; i < listOfString.length; i++){
@@ -54,26 +60,30 @@
         }
 
 
+        //retrieving from browser memory
         listOfString = JSON.parse(localStorage.getItem('employeeList'));
-
 
         if(listOfString!=null){
             copyToCustomList();
         }
 
-        console.log(listOfString)
-        console.log(empList);
+        // console.log(listOfString)
+        // console.log(empList);
 
 
 
         //need this variable from update operation
         let tmpEmpName="";
-
+        //function for saving into browser memory
         function saveIntoLocalStorage(){
             copyToStringList();
             localStorage.setItem('employeeList', JSON.stringify(listOfString));
         }
 
+
+                ///Main code segment starts here
+
+        ///for searching values in browser elements
         function liveSearch(){
             //locate the employee names
             let employees = document.querySelectorAll(".employees");
@@ -103,27 +113,21 @@
                 }
             }
 
-                    //A little delay
-        // let typingTimer;               
-        // let typeInterval = 500;  
-        // let searchInput = document.getElementById('searchbox');
-
-        // searchInput.addEventListener('keyup', () => {
-        // clearTimeout(typingTimer);
-        // typingTimer = setTimeout(liveSearch, typeInterval);
-        // });
-
         }
 
+        //remove all the elements from input taking part of the page
         function clearInputDiv(){
             let saveSuccess = document.getElementById("input-div");
             saveSuccess.innerHTML="";
         }
+
+        //remove all the elements from the output showing part of the page
         function clearOutputDiv(){
             let saveSuccess = document.getElementById("output-div");
             saveSuccess.innerHTML="";
         }
 
+        //for saving new value in the custom list
         function saveIntoList(){
             const empName = document.getElementById("emp-name");
             let msg = "";
@@ -144,6 +148,8 @@
             saveSuccess.innerHTML="";
             saveSuccess.appendChild(successMsg);
         }
+
+        //adding input field for new taking new employee name
         function addInputField(){
             clearOutputDiv();
             clearInputDiv();
@@ -162,6 +168,7 @@
             input.appendChild(addBtn);
         }
 
+        //adding a search field in the input-taking part
         function addSearchField(){
             clearOutputDiv();
             clearInputDiv();
@@ -182,13 +189,14 @@
 
         }
 
-
+        //function for entry of new employee
         function addEmp(){
             clearOutputDiv();
             clearInputDiv();
             addInputField();
         }
 
+        //function for deleting an employee
         function deleteEmp(event){
             let deleteBtn = event.target;
             let btnID = deleteBtn.id;
@@ -206,6 +214,7 @@
             }
         }
 
+        //function for updating and saving employee name
         function updateAndSave(){
             // console.log("update function e gese");
             newName = document.getElementById("emp-name").value;
@@ -223,6 +232,8 @@
                 addSearchField();
             }        
         }
+
+        //Add an update option in the input field
         function addUpdateField(empName){
             // clearOutputDiv();
             clearInputDiv();
@@ -243,6 +254,7 @@
             input.appendChild(addBtn);
         }
 
+        //onclick function for Edit button
         function editEmp(event){
             let editBtn = event.target;
             let btnID = editBtn.id;
@@ -250,7 +262,7 @@
             empName = document.getElementById(empID).innerText;
             addUpdateField(empName);
         }
-
+        //Rendering all employee without clearing input taking field
         function showAllEmpWithoutClearing(){
             clearOutputDiv();
             let cnt=0;
@@ -291,6 +303,7 @@
             }
         }
 
+        //Rendering all employee, and there will be nothing in the input section
         function showAllEmp(){
             clearOutputDiv();
             clearInputDiv();
@@ -308,17 +321,6 @@
                 x.appendChild(toBeAdded);
             }
         }
-
-
-
-        // let typingTimer;
-        // let typeInterval = 500;
-        // let searchInput = document.getElementById("searchbox");
-
-        // searchInput.addEventListener('keyup', () =>{
-        //     clearTimeout(typingTimer);
-        //     typingTimer = setTimeout(liveSearch, typeInterval);
-        // });
 
 
         
