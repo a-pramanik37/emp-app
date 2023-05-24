@@ -21,7 +21,7 @@
                 </div>
                     <div class="col-12 text-center d-flex justify-content-center gap-3 flex-wrap" id="option-column">
                         <div><button class="btn option-btn" id="add-emp" onclick="addEmp()">Add New Employee</button></div>
-                        <div><button class="btn option-btn" id="show-emp" onclick="showAllEmp()">Show All Employee</button></div>
+                        <div><button class="btn option-btn" id="show-emp" onclick="showAllEmployee()">Show All Employee</button></div>
                         <div><button class="btn option-btn" id="edit-emp" onclick="addSearchField()">Edit/Delete Employee</button></div>
                     </div>
                     <div class="col-12 text-center p-4" id="output-column">
@@ -33,7 +33,7 @@
         </div>
     </section>
 
-    <script src="app.js"></script>
+    <script src="customImplementation.js"></script>
     <script>
 
         //declaring an  object of customlist
@@ -172,7 +172,7 @@
         function addSearchField(){
             clearOutputDiv();
             clearInputDiv();
-            showAllEmpWithoutClearing();
+            showAllEmployeeWithoutClearingInputView();
             const searchArea = document.querySelector("#input-div");
 
             const searchLabel = document.createElement("label");
@@ -209,7 +209,7 @@
                 else{
                     saveIntoLocalStorage();
                     alert(`${empName} removed successfully`);
-                    showAllEmpWithoutClearing();
+                    showAllEmployeeWithoutClearingInputView();
                 } 
             }
         }
@@ -263,7 +263,7 @@
             addUpdateField(empName);
         }
         //Rendering all employee without clearing input taking field
-        function showAllEmpWithoutClearing(){
+        function showAllEmployeeWithoutClearingInputView(){
             clearOutputDiv();
             let cnt=0;
 
@@ -304,7 +304,7 @@
         }
 
         //Rendering all employee, and there will be nothing in the input section
-        function showAllEmp(){
+        function showAllEmployee(){
             clearOutputDiv();
             clearInputDiv();
             let headline = document.createElement("div");
