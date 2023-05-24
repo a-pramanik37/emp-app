@@ -126,14 +126,19 @@
             saveSuccess.innerHTML="";
         }
 
+        function showSuccessMessage(msg){
+            let saveSuccess = document.getElementById("output-div");
+            const successMsg = document.createElement("p");
+            successMsg.className="success-msg";
+            successMsg.innerText=msg;
+            saveSuccess.innerHTML="";
+            saveSuccess.appendChild(successMsg);
+        }
+
         //for saving new value in the custom list
         function saveIntoList(){
             const empName = document.getElementById("emp-name");
             let msg = "";
-            let saveSuccess = document.getElementById("output-div");
-            const successMsg = document.createElement("p");
-            successMsg.className="success-msg";
-            // console.log(empName.value);
             if(empName.value==""){
                 msg = "Invalid input, please try again."
             }
@@ -142,10 +147,8 @@
                 saveIntoLocalStorage();
                 msg = `New employee ${empName.value} has been added successfully`;
             }
-            successMsg.innerText=msg;
             clearInputView();
-            saveSuccess.innerHTML="";
-            saveSuccess.appendChild(successMsg);
+            showSuccessMessage(msg);
         }
 
         //adding input field for new taking new employee name
