@@ -16,7 +16,7 @@
             <div class="row d-flex flex-column align-items-center" id="main-row">
                 <div class="col-12 w-50">
                     <div class="logo-image">
-                        <img src="images/ems-logo-2.webp" alt="">
+                        <img src="images/ems-logo-3.webp" alt="">
                     </div>
                 </div>
                     <div class="col-12 text-center d-flex justify-content-center gap-3 flex-wrap" id="option-column">
@@ -36,8 +36,14 @@
     <script src="customListImplementation.js"></script>
     <script>
 
+
+        // ***************************
+        // ********* MODEL ***********
+        // ***************************
         //declaring an  object of customlist
         empList = new CustomList("string");
+        //need this variable from update operation
+        let tmpEmpName="";
 
         //declaring a list for
         let listOfString =[];
@@ -71,16 +77,34 @@
 
 
 
-        //need this variable from update operation
-        let tmpEmpName="";
+
         //function for saving into browser memory
         function saveIntoLocalStorage(){
             copyFromCustomListToStringList();
             localStorage.setItem('employeeList', JSON.stringify(listOfString));
         }
 
+        
+        //for saving new value in the custom list
+        function saveIntoList(){
+            const empName = document.getElementById("emp-name");
+            let msg = "";
+            if(empName.value==""){
+                msg = "Invalid input, please try again."
+            }
+            else {
+                empList.add(empName.value);
+                saveIntoLocalStorage();
+                msg = `New employee ${empName.value} has been added successfully`;
+            }
+            clearInputView();
+            showSuccessMessage(msg);
+        }
 
-                ///Main code segment starts here
+
+        // ******************************
+        // ********* CONTROLLER *********
+        // ******************************
 
         ///for searching values in browser elements
         function liveSearchOnSamePage(){
@@ -114,43 +138,6 @@
 
         }
 
-        //remove all the elements from input taking part of the page
-        function clearInputView(){
-            let saveSuccess = document.getElementById("input-div");
-            saveSuccess.innerHTML="";
-        }
-
-        //remove all the elements from the output showing part of the page
-        function clearOutputView(){
-            let saveSuccess = document.getElementById("output-div");
-            saveSuccess.innerHTML="";
-        }
-
-        function showSuccessMessage(msg){
-            let saveSuccess = document.getElementById("output-div");
-            const successMsg = document.createElement("p");
-            successMsg.className="success-msg";
-            successMsg.innerText=msg;
-            saveSuccess.innerHTML="";
-            saveSuccess.appendChild(successMsg);
-        }
-
-        //for saving new value in the custom list
-        function saveIntoList(){
-            const empName = document.getElementById("emp-name");
-            let msg = "";
-            if(empName.value==""){
-                msg = "Invalid input, please try again."
-            }
-            else {
-                empList.add(empName.value);
-                saveIntoLocalStorage();
-                msg = `New employee ${empName.value} has been added successfully`;
-            }
-            clearInputView();
-            showSuccessMessage(msg);
-        }
-
         //adding input field for new taking new employee name
         function addInputFieldView(){
             clearOutputView();
@@ -162,12 +149,19 @@
             name.placeholder = "Enter Employee Name";
 
             const addBtn = document.createElement("button");
-            addBtn.innerText = "Add Employee";
+            addBtn.innerText = "Save Employee";
             addBtn.id = "add-emp-btn";
             addBtn.addEventListener("click", saveIntoList)
 
             input.appendChild(name);
             input.appendChild(addBtn);
+        }
+
+        //function for entry of new employee
+        function addEmp(){
+            clearOutputView();
+            clearInputView();
+            addInputFieldView();
         }
 
         //adding a search field in the input-taking part
@@ -191,49 +185,46 @@
 
         }
 
-        //function for entry of new employee
-        function addEmp(){
-            clearOutputView();
-            clearInputView();
-            addInputFieldView();
-        }
-
         //function for deleting an employee
         function deleteEmp(event){
             let deleteBtn = event.target;
             let btnID = deleteBtn.id;
             let empID = btnID.slice(0, 15);
             empName = document.getElementById(empID).innerText;
-            let confirm = prompt(`Are you sure? Write anything and click OK to remove ${empName} or click Cancel otherwise.`);
+            let confirm = promptDeleteConfirmation(empName);
             if(confirm){
                 let res = empList.removeElement(empName);
-                if(res==-1)alert(`Employee not found or some error occured!`);
+                if(res==-1){
+                    showEmployeeNotFoundAlert();
+                }
                 else{
                     saveIntoLocalStorage();
-                    alert(`${empName} removed successfully`);
+                    showEmployeeRemovedSuccessMsg(empName);
                     showAllEmployeeWithoutClearingInputView();
                 } 
             }
         }
 
+
+
+
         //function for updating and saving employee name
         function updateAndSave(){
-            // console.log("update function e gese");
             newName = document.getElementById("emp-name").value;
             console.log(newName);
 
-            let confirm = prompt(`Change name from ${tmpEmpName} to ${newName}?\nWrite anything and click OK to update or click Cancel otherwise.`);
+            let confirm = promptEmployeeUpdateConfirmation(tmpEmpName, newName);
             if(confirm){
                 let index = empList.indexOf(tmpEmpName);
                 let removedItem = empList.removeFrom(index);
                 empList.insertAt(newName, index);
                 saveIntoLocalStorage();
-                let updateSuccess = alert("Successfully updated!");
-                // if(updateSuccess){
-                // }
+                updateSuccessAlert();
+
                 addSearchFieldView();
             }        
         }
+
 
         //Add an update option in the input field
         function addUpdateField(empName){
@@ -244,8 +235,6 @@
             name.type = "text";
             name.id = "emp-name";
             name.value = empName;
-            // console.log(empName);
-            // name.placeholder = "Update Employee Name";
 
             const addBtn = document.createElement("button");
             addBtn.innerText = "Click to Update";
@@ -255,6 +244,7 @@
             input.appendChild(addBtn);
         }
 
+
         //onclick function for Edit button
         function editEmp(event){
             let editBtn = event.target;
@@ -263,6 +253,55 @@
             empName = document.getElementById(empID).innerText;
             addUpdateField(empName);
         }
+
+
+
+        // ***************************
+        // *********** VIEW **********
+        // ***************************
+        //remove all the elements from input taking part of the page
+        function clearInputView(){
+            let saveSuccess = document.getElementById("input-div");
+            saveSuccess.innerHTML="";
+        }
+
+        //remove all the elements from the output showing part of the page
+        function clearOutputView(){
+            let saveSuccess = document.getElementById("output-div");
+            saveSuccess.innerHTML="";
+        }
+
+        function showSuccessMessage(msg){
+            let saveSuccess = document.getElementById("output-div");
+            const successMsg = document.createElement("p");
+            successMsg.className="success-msg";
+            successMsg.innerText=msg;
+            saveSuccess.innerHTML="";
+            saveSuccess.appendChild(successMsg);
+        }
+
+        function promptDeleteConfirmation(empName){
+            return prompt(`Are you sure? Write anything and click OK to remove ${empName} or click Cancel otherwise.`);
+        }
+
+
+        function showEmployeeNotFoundAlert() {
+            alert(`Employee not found or some error occured!`);
+        }
+
+        function showEmployeeRemovedSuccessMsg(empName){
+            alert(`${empName} removed successfully`);
+        }
+
+        function promptEmployeeUpdateConfirmation(tmpEmpName, newName){
+            return prompt(`Change name from ${tmpEmpName} to ${newName}?\nWrite anything and click OK to update or click Cancel otherwise.`);
+        }
+        
+        function updateSuccessAlert(){
+            alert("Successfully updated!");
+        }
+
+
         //Rendering all employee without clearing input taking field
         function showAllEmployeeWithoutClearingInputView(){
             clearOutputView();
@@ -272,7 +311,11 @@
                 let item = empList.getValueAt(i);
                 let x = document.getElementById("output-div");
                 let toBeAdded = document.createElement("div");
-                toBeAdded.className = "employees"
+                let rowRapper = document.createElement("div");
+                rowRapper.className = "row-rapper d-flex gap-0 justify-content-center align-items-center gap-1";
+                let btnContainerDiv = document.createElement("div");
+                toBeAdded.className = "employees w-50 align-content-left";
+                btnContainerDiv.className = "btn-container-div align-content-left d-flex gap-1";
 
                 //creating unique IDs
                 let currentDate = new Date();
@@ -295,10 +338,15 @@
                 deleteBtn.id = deleteBtnID;
                 deleteBtn.onclick = deleteEmp;
 
-                x.appendChild(toBeAdded);
-                x.appendChild(editBtn);
-                x.appendChild(deleteBtn);
-                
+
+                btnContainerDiv.appendChild(editBtn);
+                btnContainerDiv.appendChild(deleteBtn);
+
+                rowRapper.appendChild(toBeAdded)
+                rowRapper.appendChild(btnContainerDiv);
+
+                x.appendChild(rowRapper);
+
                 cnt++;
                 if(cnt>9)cnt=0;
             }
